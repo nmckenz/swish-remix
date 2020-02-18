@@ -25,9 +25,11 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Pull all current player season stats on app load
     this.getAllPlayers();
   };
 
+  //API call for all player season stats
   getAllPlayers = () => {
     axios({
       url: `${this.state.urlSDIO}stats/json/PlayerSeasonStats/2020`,
@@ -46,6 +48,7 @@ class App extends Component {
     })
   };
 
+
   getUserPlayer = (name) => {
     const stringSearchValues = name.toLowerCase().split(' ');
     console.log("string search values", stringSearchValues);
@@ -53,6 +56,7 @@ class App extends Component {
       stringSearchValues.forEach(name => {
         (player.Name.toLowerCase().includes(name)) ? player : null;
       })
+      // not sure if this will work, must test. trying to filter player objects by user name input which may be two words. looking to return player object if either user word matches player object name property
     })
 
   }
