@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.scss';
+import axios from 'axios';
 
 class App extends Component {
   // NOTES:
@@ -17,13 +18,44 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      urlSDIO: "https://www.balldontlie.io/api/v1",
+      urlSDIO: "https://api.sportsdata.io/v3/nba/",
       keySDIO: "b89d8f35286d40bea76016a8d3b5a9cd",
-
+      playerSeasonStats: [],
     };
   }
 
-  
+  componentDidMount() {
+    this.getAllPlayers();
+  };
+
+  getAllPlayers = () => {
+    axios({
+      url: `${this.state.urlSDIO}stats/json/PlayerSeasonStats/2020`,
+      method: "GET",
+      dataResponse: "json",
+      params: {
+        key: this.state.keySDIO
+      }
+    }).then((response) => {
+      console.log("all players season stats api response", response)
+      this.setState({
+        playerSeasonStats: response.data
+      })
+    }).catch((error) => {
+      console.log("Something went wrong while trying to get player stats", error)
+    })
+  };
+
+  getUserPlayer = (name) => {
+    const stringSearchValues = name.toLowerCase().split(' ');
+    console.log("string search values", stringSearchValues);
+    const matches = this.state.playerSeasonStats.filter(player => {
+      stringSearchValues.forEach(name => {
+        (player.Name.toLowerCase().includes(name)) ? player : null;
+      })
+    })
+
+  }
 
 
   render() {
